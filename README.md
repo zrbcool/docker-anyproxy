@@ -7,7 +7,7 @@ docker run --name anyproxy --restart=always \
     -d zrbcool/anyproxy:latest
 ```
 access [ip]:8002 in your browser
-![](http://oss.zrbcool.top/picgo/anyproxy.png-gh)
+![](http://oss.zrbcool.top/picgo/anyproxy-1.png-gh)
 
 ### Apache Httpclient Support & Configuration
 #### For Apache HttpClient 4.5+ & Java8
