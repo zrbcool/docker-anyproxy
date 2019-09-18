@@ -19,6 +19,7 @@ SSLConnectionSocketFactory sslConnectionSocketFactory =
         NoopHostnameVerifier.INSTANCE);
 CloseableHttpClient client = HttpClients.custom()
         .setSSLSocketFactory(sslConnectionSocketFactory)
+	.setProxy(new HttpHost('$proxyHost', '$proxyPort'))//important! replace $proxyHost and $proxyPort with your real value
         .build();
 ```
 #### But if your HttpClient use a ConnectionManager
