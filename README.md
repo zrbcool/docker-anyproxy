@@ -21,16 +21,16 @@ SSLConnectionSocketFactory sslConnectionSocketFactory =
         NoopHostnameVerifier.INSTANCE);
 CloseableHttpClient client = HttpClients.custom()
         .setSSLSocketFactory(sslConnectionSocketFactory)
-	.setProxy(new HttpHost('$proxyHost', '$proxyPort'))//important! replace $proxyHost and $proxyPort with your real value
+	//important! replace $proxyHost and $proxyPort with your real value
+	.setProxy(new HttpHost('$proxyHost', '$proxyPort'))
         .build();
 ```
 #### But if your HttpClient use a ConnectionManager
 But if your HttpClient use a ConnectionManager for seeking connection, e.g. like this:
 ```java
- PoolingHttpClientConnectionManager connectionManager = new 
-         PoolingHttpClientConnectionManager();
+PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
 
- CloseableHttpClient client = HttpClients.custom()
+CloseableHttpClient client = HttpClients.custom()
             .setConnectionManager(connectionManager)
             .build();
 ```
@@ -38,11 +38,11 @@ The HttpClients.custom().setSSLSocketFactory(sslConnectionSocketFactory) has no 
 
 Because that the HttpClient use the specified connectionManager for seeking connection and the specified connectionManager haven't register our customized SSLConnectionSocketFactory. To resolve this, should register the The customized SSLConnectionSocketFactory in the connectionManager. The correct code should like this:  
 ```java
-PoolingHttpClientConnectionManager connectionManager = new 
-    PoolingHttpClientConnectionManager(RegistryBuilder.
-                <ConnectionSocketFactory>create()
-      .register("http",PlainConnectionSocketFactory.getSocketFactory())
-      .register("https", sslConnectionSocketFactory).build());
+PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+	RegistryBuilder.<ConnectionSocketFactory>create()
+		.register("http",PlainConnectionSocketFactory.getSocketFactory())
+		.register("https", sslConnectionSocketFactory).build()
+);
 
 CloseableHttpClient client = HttpClients.custom()
             .setConnectionManager(connectionManager)
